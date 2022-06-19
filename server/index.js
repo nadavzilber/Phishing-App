@@ -15,13 +15,13 @@ app.use('/employees', employeesRouter)
 app.use('/emails', emailsRouter)
 
 app.use('/', ()=> console.log('HOME'))
-const init = async () => {
 
+const init = async () => {
     await initServer()
     await initDb()
 }
-const initServer = async () => {
 
+const initServer = async () => {
     try {
         await app.listen(port)
         console.log(`Server is running on port ${port}`)
@@ -30,16 +30,16 @@ const initServer = async () => {
         console.log(`Server failed to run on port ${port} - ${err}`)
     }
 }
-const initDb = async () => {
 
+const initDb = async () => {
     try {
         await mongoose.connect(connectionUrl, {useNewUrlParser: true})
         console.log('Successfully connected to DB')
-        // todo: seed data
     } catch (err) {
         // todo: add retry mechanism
         console.log(`Failed connecting to DB - ${err}`)
     }
 }
-init().then(() => console.log('Ready...'))
+
+init().then(() => console.log('Ready.............'))
 
