@@ -1,0 +1,29 @@
+Phishing App
+
+Server-
+    * Server connection
+    * Mongo connection
+    * routes -
+        employee-
+            * Reg
+            * Login
+        email-
+            * Send
+            * Get status list
+            * phishing link click tracker
+    * models
+    * controllers
+    * config/env params
+
+Client-
+    * Login page
+    * Reg page
+    * Send email page - email, fixed template, malicious link
+    * Phishing status list page
+
+
+* Path params
+* Hashing passwords (+ salt)
+* JWT
+* Seed - initial employees in DB
+
