@@ -56,7 +56,8 @@ const sendPhishingEmail = async (req, res) => {
     try {
         //senderEmail = microsoft, ebay, fb, amazon support
         //subject = reset your password / your order is on its way / track your order / order was returned
-        const {recipientEmail, senderName, senderEmail, subject, text, html} = req.body
+        const {recipientName, recipientEmail, senderName, senderEmail, subject, text, html} = req.body
+        console.log({recipientName, recipientEmail, senderName, senderEmail, subject, text, html})
         let info = await transporter.sendMail({
             from: `${senderName} ${senderEmail}`,
             to: recipientEmail,
@@ -66,8 +67,7 @@ const sendPhishingEmail = async (req, res) => {
         });
         console.log("Email sent: %s", info.messageId);
         console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
-        await updateEmailList(recipientEmail)
-        console.log('returning')
+        await updateEmailList(recipientEmail, recipientName)
         return res.status(200).json({success: true})
     } catch (error) {
         console.log('send email error -',error)
@@ -75,20 +75,22 @@ const sendPhishingEmail = async (req, res) => {
     }
 }
 
-const updateEmailList = async (emailAddress) => {
+const updateEmailList = async (emailAddress, employeeName) => {
     try {
         console.log('updateEmailList email:', emailAddress)
         const employee = await getEmployee(emailAddress)
         if (!employee) {
             console.log('no emp:', employee)
-            return //TODO: how should this be handled? is this an error?
+            //return //TODO: how should this be handled? is this an error?
         }
-        const newEmail = {name: employee.name, email: emailAddress, status: NOT_CLICKED}
-        const updatedEmail = await emailModel.findOneAndUpdate(newEmail)
-        if (!updatedEmail){
-            console.log('creating new mail obj in collection')
-            await emailModel.create(newEmail)
-        }
+        let n = employee?.name || employeeName
+        console.log('n =',n)
+        const newEmail = {name: employee?.name || employeeName, email: emailAddress, status: NOT_CLICKED}
+        //const updatedEmail = await emailModel.findOneAndUpdate(newEmail)
+        //if (!updatedEmail){
+        console.log('creating new mail obj in collection')
+        await emailModel.create(newEmail)
+        //}
     } catch (error) {
         //TODO: retry mechanism
         console.log('Failed updating the phishing email list', error)

@@ -4,6 +4,7 @@ import {config} from '../config.js'
 async function isAuthorized(req, res, next) {
     try {
         const {authorization} = req.headers;
+        //console.log('ALL req.headers:', req.headers)
         console.log('auth:', authorization)
         const token = authorization?.replace('Bearer ','');
         if (!token) {

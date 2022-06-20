@@ -47,8 +47,9 @@ const EmailForm = () => {
         console.log('sendPhishingEmail')
         const url = 'http://localhost:8000/email/send'
         const body = {senderName, senderEmail, recipientName, recipientEmail: recipientEmail, subject, text, html}
+        const headers = { headers: {"Authorization" : window.sessionStorage.getItem('authToken')} }
         try {
-            const res = await axios.post(url, body)
+            const res = await axios.post(url, body, headers)
             console.log('res:',res)
             if (res?.status === 200 && res.data.success){
                 console.log('success!')
