@@ -17,8 +17,6 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use('/employee', employeeRouter)
 app.use('/email', emailRouter)
 
-//app.use('/', ()=> console.log('HOME'))
-
 const init = async () => {
     await initServer()
     await initDb()
@@ -30,7 +28,7 @@ const initServer = async () => {
         await app.listen(port)
         console.log(`Server is running on port ${port}`)
     } catch (error) {
-        // todo: add retry mechanism
+        //TODO: add retry mechanism
         console.log(`Server failed to run on port ${port} - ${error}`)
     }
 }
@@ -40,7 +38,7 @@ const initDb = async () => {
         await mongoose.connect(connectionUrl, {useNewUrlParser: true})
         console.log('Successfully connected to DB')
     } catch (error) {
-        // todo: add retry mechanism
+        //TODO: add retry mechanism
         console.log(`Failed connecting to DB - ${error}`)
     }
 }

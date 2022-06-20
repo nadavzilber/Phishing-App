@@ -17,7 +17,6 @@ const EmailForm = () => {
     const [html, setHtml] = useState('')
 
     const loadTemplate = () => {
-        console.log('selected temp:', templates[selectedTemplate])
         const {senderName, senderEmail, recipientName, recipientEmail, subject, text, html} = templates[selectedTemplate]
         setSenderName(senderName)
         setSenderEmail(senderEmail)
@@ -29,30 +28,20 @@ const EmailForm = () => {
     }
 
     const validateAndSend = (ev) => {
-        console.log('validateAndSend')
         ev.preventDefault()
         if (senderName.trim() && senderEmail.trim() && recipientName.trim() && recipientEmail.trim() &&
             subject.trim() && text.trim() && html.trim()) {
-            //todo: call send email api
-            //Post req => localhost:8000/email/send
-            //Body => {senderName: senderName, senderEmail: senderEmail, recipientName: recipientName, recipientEmail: recipientEmail,
-            // subject, text, html}
-            // if success- show toast,
-            // if not - show toast
             sendPhishingEmail()
         }
     }
 
     const sendPhishingEmail = async () => {
-        console.log('sendPhishingEmail')
         const url = 'http://localhost:8000/email/send'
         const body = {senderName, senderEmail, recipientName, recipientEmail: recipientEmail, subject, text, html}
         const headers = { headers: {"Authorization" : window.sessionStorage.getItem('authToken')} }
         try {
             const res = await axios.post(url, body, headers)
-            console.log('res:',res)
             if (res?.status === 200 && res.data.success){
-                console.log('success!')
                 toast.success('Successfully sent phishing email', {
                     position: "top-right",
                     autoClose: 5000,
@@ -64,7 +53,6 @@ const EmailForm = () => {
                 });
             }
         } catch (err) {
-            console.log('err:',err)
             toast.warn('Failed to send phishing email', {
                 position: "top-right",
                 autoClose: 5000,
@@ -74,12 +62,10 @@ const EmailForm = () => {
                 draggable: true,
                 progress: undefined,
             });
-            //showAlert({msg: 'Failed sending phishing email', success: false})
         }
     }
 
     const onSelectTemplate = (value) => {
-        console.log('on select tmp:', value)
         if (value === 'select'){
             setSelectedTemplate(null)
         } else {

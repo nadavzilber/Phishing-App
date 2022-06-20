@@ -14,7 +14,6 @@ const AuthForm = ({setIsAuth}) => {
 
     const validateAndAuth = async (ev) => {
         ev.preventDefault()
-        console.log('validateAndAuth')
         if ((!password.trim() && !email.trim()) || (formType === 'signup' && !name.trim())) {
             toast.warn(`Please fill out all required fields for ${formType}`, {
                 position: "top-right",
@@ -27,13 +26,10 @@ const AuthForm = ({setIsAuth}) => {
             });
             return
         }
-        // todo: should I hash the pw before sending it?
         const body = {password, email, name}
         const url = `http://localhost:8000/employee/${formType}`
-        console.log('body, url:',body,url)
         const res = await axios.post(url, body)
         if (res?.status === 200 && res.data.success){
-            console.log('success!', res)
             window.sessionStorage.setItem('authToken', res.data['authorization'])
             toast.success(`Successful ${formType}`, {
                 position: "top-right",

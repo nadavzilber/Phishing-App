@@ -7,9 +7,7 @@ const EmailList = () => {
     const getEmails = async () => {
         const url = 'http://localhost:8000/email/'
         const headers = { headers: {"Authorization" : window.sessionStorage.getItem('authToken')} }
-        console.log('headers:', headers)
         const res = await axios.get(url, headers)
-        console.log('get emails resp:',res)
         if (res?.status === 200 && res.data.emails) {
             setEmails(res.data.emails)
         } else {
