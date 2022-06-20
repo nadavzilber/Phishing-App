@@ -54,20 +54,21 @@ const clearCollection = async (req, res) => {
 
 const sendPhishingEmail = async (req, res) => {
     try {
-        //fromEmail = microsoft, ebay, fb, amazon support
+        //senderEmail = microsoft, ebay, fb, amazon support
         //subject = reset your password / your order is on its way / track your order / order was returned
-        const {toEmail, fromName, fromEmail, subject, text, html} = req.body
+        const {recipientEmail, senderName, senderEmail, subject, text, html} = req.body
         let info = await transporter.sendMail({
-            from: `${fromName} ${fromEmail}`,
-            to: toEmail,
+            from: `${senderName} ${senderEmail}`,
+            to: recipientEmail,
             subject,
             text,
             html
         });
         console.log("Email sent: %s", info.messageId);
         console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
-        await updateEmailList(toEmail)
-        return res.status(200).send()
+        await updateEmailList(recipientEmail)
+        console.log('returning')
+        return res.status(200).json({success: true})
     } catch (error) {
         console.log('send email error -',error)
         return res.status(400).json({error})
@@ -85,6 +86,7 @@ const updateEmailList = async (emailAddress) => {
         const newEmail = {name: employee.name, email: emailAddress, status: NOT_CLICKED}
         const updatedEmail = await emailModel.findOneAndUpdate(newEmail)
         if (!updatedEmail){
+            console.log('creating new mail obj in collection')
             await emailModel.create(newEmail)
         }
     } catch (error) {

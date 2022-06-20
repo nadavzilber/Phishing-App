@@ -38,7 +38,8 @@ const employeeSignUp = async (req, res) => {
         await employeeModel.create(credentials)
         console.log(`Successfully created a new employee with these credentials: ${JSON.stringify(credentials)}`)
         res.setHeader('Authorization', `Bearer ${generateToken( {email})}`)
-        return res.status(200).json({success: true})
+        console.log('returning token to client for signup')
+        return res.status(200).json({success: true, authorization: `Bearer ${generateToken( {email})}`})
     } catch (error) {
         //TODO: check right status code for failed reg
         console.log('signup error:',error)
@@ -53,12 +54,13 @@ const employeeLogin = async (req, res) => {
             return res.status(400).json({error: 'Please enter a valid email and password'})
         }
         const employee = await employeeModel.findOne({email}).lean()
-        // todo: verify right status code
+        // todo:  verify right status code
         if (!employee) return res.status(400).json({error: 'Employee not found'})
         const comparisonResult = await compare(password, employee.password)
         if (comparisonResult) {
             res.setHeader('Authorization', `Bearer ${generateToken(employee)}`)
-            return res.status(200).json({success: true})
+            console.log('returning token to client for login')
+            return res.status(200).json({success: true, authorization: `Bearer ${generateToken(employee)}`})
         }
         // TODO: check right status code for rejection
         return res.status(400).json({error: 'Bad credentials'})

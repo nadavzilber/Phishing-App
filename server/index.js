@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import {config} from './config.js'
+import cors from 'cors'
 import bodyParser from 'body-parser'
 import {employeeRouter} from './routes/employee.js'
 import {emailRouter} from './routes/email.js'
@@ -10,6 +11,7 @@ const app = express()
 const port = process.env.PORT || config.PORT
 const connectionUrl = `mongodb+srv://${config.DB_USER}:${config.DB_PASSWORD}@cluster0.rjybf.mongodb.net/?retryWrites=true&w=majority`;
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use('/employee', employeeRouter)

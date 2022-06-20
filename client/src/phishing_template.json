@@ -1,0 +1,29 @@
+{
+"amazon": {
+  "senderName": "Amazon Support",
+  "senderEmail": "support@amazon.com",
+  "recipientName": "Nadav",
+  "recipientEmail": "nadav@test.com",
+  "subject": "Your order was returned to the sender",
+  "text": "Since you couldn't be reached, your Amazon order was returned.",
+  "html": "<div><h2>A total of 3 packages were returned</h2><a href='http://localhost:8000/email/phish?email=nadav%40test.com'>Order details</a></div>"
+},
+  "instagram": {
+    "senderName": "Instagram Support",
+    "senderEmail": "support@instagram.com",
+    "recipientName": "Nadav",
+    "recipientEmail": "nadav@test.com",
+    "subject": "Urgent- Your password has expired",
+    "text": "It is important that you change your password as soon as possible",
+    "html": "<div><h2>Your password has expired</h2><a href='http://localhost:8000/email/phish?email=nadav%40test.com'>Reset password</a></div>"
+  },
+  "facebook": {
+    "senderName": "Facebook Support",
+    "senderEmail": "support@facebook.com",
+    "recipientName": "Nadav",
+    "recipientEmail": "nadav@test.com",
+    "subject": "Your account has been restricted",
+    "text": "You have violated Facebook's terms and agreements",
+    "html": "<div><h2>Violation #13507</h2><a href='http://localhost:8000/email/phish?email=nadav%40test.com'>Review</a></div>"
+  }
+}
