@@ -13,9 +13,42 @@ const AuthForm = ({setIsAuth}) => {
     }
 
     const validateAndAuth = async (ev) => {
-        ev.preventDefault()
-        if ((!password.trim() && !email.trim()) || (formType === 'signup' && !name.trim())) {
-            toast.warn(`Please fill out all required fields for ${formType}`, {
+        try {
+            ev.preventDefault()
+            if ((!password.trim() && !email.trim()) || (formType === 'signup' && !name.trim())) {
+                toast.warn(`Please fill out all required fields for ${formType}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                return
+            }
+            const body = {password, email, name}
+            const url = `http://localhost:8000/employee/${formType}`
+            const res = await axios.post(url, body)
+            if (res?.status === 200 && res.data.success){
+                console.log('Successful',formType)
+                window.sessionStorage.setItem('authToken', res.data['authorization'])
+                toast.success(`Successful ${formType}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setTimeout(()=> setIsAuth(true), 2000)
+            } else {
+                throw new Error(`Failed ${formType}`)
+            }
+        } catch (error) {
+            console.log(formType,'error:',error)
+            toast.warn(`Unsuccessful ${formType}`, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -24,23 +57,6 @@ const AuthForm = ({setIsAuth}) => {
                 draggable: true,
                 progress: undefined,
             });
-            return
-        }
-        const body = {password, email, name}
-        const url = `http://localhost:8000/employee/${formType}`
-        const res = await axios.post(url, body)
-        if (res?.status === 200 && res.data.success){
-            window.sessionStorage.setItem('authToken', res.data['authorization'])
-            toast.success(`Successful ${formType}`, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-            setIsAuth(true)
         }
     }
 
